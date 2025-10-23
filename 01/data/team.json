@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Dr. Marcus Greene",
+    "role": "Founder & CEO",
+    "bio": "Ph.D. in Environmental Science from Stanford. Passionate advocate for eco-conscious innovations and sustainable technologies.",
+    "image": "assets/img/team1.jpg"
+  },
+  {
+    "name": "Aisha Kwon",
+    "role": "CTO",
+    "bio": "Expert in bio-engineering and the visionary behind NaturaTech’s smart green technologies.",
+    "image": "assets/img/team2.jpg"
+  },
+  {
+    "name": "Carlos Mendoza",
+    "role": "Chief of Design",
+    "bio": "Combines minimalism and bio-inspired design to make eco-tech both beautiful and practical.",
+    "image": "assets/img/team3.jpg"
+  },
+  {
+    "name": "Lydia D'souza",
+    "role": "VP of Operations",
+    "bio": "Ensures every step of NaturaTech’s supply chain is ethical, efficient, and environmentally responsible.",
+    "image": "assets/img/team4.jpg"
+  },
+  {
+    "name": "Jamal Ahmed",
+    "role": "Head of EcoLearn Hub",
+    "bio": "Former Yale professor who curates EcoLearn’s global sustainability and education programs.",
+    "image": "assets/img/team5.jpg"
+  }
+]
