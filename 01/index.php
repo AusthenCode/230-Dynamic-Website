@@ -8,7 +8,7 @@ require_once 'lib/readJSON.php';
 $overview = readTextFile('data/overview.txt');
 $mission = readTextFile('data/about.txt');
 $products = readCSVFile('data/products.csv');
-$team = readJSONFile('data/team.json');
+$team = readCSVFile('data/team.csv');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,15 +75,12 @@ $team = readJSONFile('data/team.json');
         </div>
         <div class="row">
             <?php foreach ($team as $member): ?>
-            <div class="col-md-3 text-center mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5><?php echo $member['name']; ?></h5>
-                        <p class="text-muted"><?php echo $member['role']; ?></p>
-                        <p><?php echo $member['bio']; ?></p>
-                    </div>
+                <div class="team-member">
+                 <img src="<?= $member['image'] ?>" alt="<?= $member['name'] ?>">
+                 <h3><?= $member['name'] ?></h3>
+                 <p><strong><?= $member['role'] ?></strong></p>
+                 <p><?= $member['bio'] ?></p>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
     </div>
