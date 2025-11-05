@@ -1,47 +1,33 @@
 <?php
-// Include the team library
-require_once __DIR__ . '/../../lib/team.php'; // correct path to team.php
-
-$errors = [];
-$saved = false;
+require_once __DIR__ . '/../../lib/team.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
-    $role = trim($_POST['role'] ?? '');
-    $bio = trim($_POST['bio'] ?? '');
-
-    if ($name === '') $errors[] = "Name is required.";
-    if ($role === '') $errors[] = "Role is required.";
-
-    if (empty($errors)) {
-        $newMember = team_create([
-            'name' => $name,
-            'role' => $role,
-            'bio' => $bio
-        ]);
-        $saved = true;
-    }
+    $data = [
+        'name' => $_POST['name'] ?? '',
+        'role' => $_POST['role'] ?? '',
+        'bio'  => $_POST['bio'] ?? '',
+        'image'=> $_POST['image'] ?? ''
+    ];
+    Team::create($data);
+    header('Location: index.php');
+    exit;
 }
 ?>
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Create Team Member</title>
-</head>
-<body>
-  <h1>Create Team Member</h1>
 
-  <?php if ($saved): ?>
-    <p style="color:green;">Team member created successfully.</p>
-  <?php endif; ?>
+<h1>Add New Team Member</h1>
 
-  <?php if ($errors): ?>
-    <ul style="color:red;">
-      <?php foreach ($errors as $e) echo "<li>" . htmlspecialchars($e) . "</li>"; ?>
-    </ul>
-  <?php endif; ?>
+<form method="post">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br><br>
 
-  <form method="post">
-    <label>Name:<br><input name="name" value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>"></label><br>
-    <label>Role:<br><input name=
+    <label>Role:</label><br>
+    <input type="text" name="role"><br><br>
+
+    <label>Bio:</label><br>
+    <textarea name="bio"></textarea><br><br>
+
+    <label>Image URL:</label><br>
+    <input type="text" name="image"><br><br>
+
+    <button type="submit">Save</button>
+</form>

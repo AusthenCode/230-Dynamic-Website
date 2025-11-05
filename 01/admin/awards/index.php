@@ -1,43 +1,36 @@
 <?php
-include '../../lib/readCSV.php';
-
-$awards = readCSVFile('../../data/awards.csv');
+require_once __DIR__ . '/../../lib/award.php';
+$awards = Award::all();
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Admin - Awards</title>
-  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <meta charset="utf-8">
+  <title>Awards Management</title>
 </head>
-<body class="p-4">
-  <h2>Awards</h2>
-  <a href="create.php" class="btn btn-primary mb-3">+ Add a New Award</a>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <?php if (!empty($awards)): ?>
-          <?php foreach (array_keys($awards[0]) as $header): ?>
-            <th><?= htmlspecialchars($header) ?></th>
-          <?php endforeach; ?>
-          <th>Actions</th>
-        <?php endif; ?>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach ($awards as $index => $award): ?>
+<body>
+  <h1>Awards</h1>
+  <a href="../index.php">Admin Dashboard</a>
+  <a href="create.php">Add New Award</a>
+
+  <?php if (empty($awards)): ?>
+    <p>No awards found.</p>
+  <?php else: ?>
+    <table border="1" cellpadding="5">
+      <tr><th>#</th><th>Title</th><th>Year</th><th>Description</th><th>Actions</th></tr>
+      <?php foreach ($awards as $i => $award): ?>
         <tr>
-          <?php foreach ($award as $value): ?>
-            <td><?= htmlspecialchars($value) ?></td>
-          <?php endforeach; ?>
+          <td><?= $i + 1 ?></td>
+          <td><?= htmlspecialchars($award['title']) ?></td>
+          <td><?= htmlspecialchars($award['year']) ?></td>
+          <td><?= htmlspecialchars($award['description']) ?></td>
           <td>
-            <a href="detail.php?id=<?= $index ?>" class="btn btn-sm btn-info">View</a>
-            <a href="edit.php?id=<?= $index ?>" class="btn btn-sm btn-warning">Edit</a>
-            <a href="delete.php?id=<?= $index ?>" class="btn btn-sm btn-danger">Delete</a>
+            <a href="edit.php?id=<?= $i ?>">Edit</a>
+            <a href="delete.php?id=<?= $i ?>">Delete</a>
           </td>
         </tr>
       <?php endforeach; ?>
-    </tbody>
-  </table>
+    </table>
+  <?php endif; ?>
 </body>
 </html>

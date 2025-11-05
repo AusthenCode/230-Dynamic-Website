@@ -1,79 +1,44 @@
 <?php
-define('TEAM_FILE', __DIR__ . '/../data/team.csv');
+require_once __DIR__ . '/CSVHelper.php';
 
-// Read all team members
-function team_all(): array {
-    if (!file_exists(TEAM_FILE)) return [];
-    $rows = array_map('str_getcsv', file(TEAM_FILE));
-    $header = array_shift($rows);
-    $team = [];
-    foreach ($rows as $index => $row) {
-        if (count($row) === count($header)) {
-            $member = array_combine($header, $row);
-            $member['id'] = $index + 1; // Auto-generate ID
-            $team[] = $member;
-        }
+class Team {
+    private static $file = __DIR__ . '/../data/team.csv';
+
+    public static function all(): array {
+        return CSVHelper::read(self::$file);
     }
-    return $team;
-}
 
-// Get a single member by ID
-function team_get(int $id): ?array {
-    foreach (team_all() as $member) {
-        if ($member['id'] === $id) return $member;
+    public static function get(int $index): ?array {
+        $all = self::all();
+        return $all[$index] ?? null;
     }
-    return null;
-}
 
-// Generate next ID
-function nextTeamId(array $items): int {
-    $max = 0;
-    foreach ($items as $item) {
-        if ($item['id'] > $max) $max = $item['id'];
+    public static function create(array $data): array {
+        $all = self::all();
+        $all[] = [
+            'name' => $data['name'] ?? '',
+            'role' => $data['role'] ?? '',
+            'bio' => $data['bio'] ?? '',
+            'image' => $data['image'] ?? ''
+        ];
+        CSVHelper::write(self::$file, $all);
+        return end($all);
     }
-    return $max + 1;
-}
 
-// Create a new member
-function team_create(array $data): array {
-    $items = team_all();
-    $new = [
-        'id' => nextTeamId($items),
-        'name' => $data['name'] ?? '',
-        'role' => $data['role'] ?? '',
-        'bio' => $data['bio'] ?? '',
-        'image' => $data['image'] ?? ''
-    ];
-    $items[] = $new;
-
-    // Rewrite CSV with updated data
-    $header = ['name','role','bio','image'];
-    $lines = [implode(',', $header)];
-    foreach ($items as $m) {
-        $lines[] = implode(',', [$m['name'],$m['role'],$m['bio'],$m['image']]);
+    public static function update(int $index, array $data): bool {
+        $all = self::all();
+        if (!isset($all[$index])) return false;
+        $all[$index] = array_merge($all[$index], $data);
+        CSVHelper::write(self::$file, $all);
+        return true;
     }
-    file_put_contents(TEAM_FILE, implode("\n", $lines));
 
-    return $new;
-}
-
-// Delete member
-function team_delete(int $id): bool {
-    $items = team_all();
-    $new = [];
-    $found = false;
-    foreach ($items as $member) {
-        if ($member['id'] === $id) { $found = true; continue; }
-        $new[] = $member;
+    public static function delete(int $index): bool {
+        $all = self::all();
+        if (!isset($all[$index])) return false;
+        unset($all[$index]);
+        CSVHelper::write(self::$file, array_values($all));
+        return true;
     }
-    if ($found) {
-        $header = ['name','role','bio','image'];
-        $lines = [implode(',', $header)];
-        foreach ($new as $m) {
-            $lines[] = implode(',', [$m['name'],$m['role'],$m['bio'],$m['image']]);
-        }
-        file_put_contents(TEAM_FILE, implode("\n", $lines));
-    }
-    return $found;
 }
 ?>
